@@ -14,6 +14,7 @@ if (!isset($_SESSION['login'])) {
     <title>Tambah Produk | Galang Store</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body { 
             font-family: 'Inter', sans-serif; 
@@ -41,6 +42,17 @@ if (!isset($_SESSION['login'])) {
             border-color: #3182ce;
             box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
         }
+        /* Style khusus untuk input file */
+        .form-control::file-selector-button {
+            background-color: #edf2f7;
+            border: none;
+            border-radius: 8px;
+            padding: 0.2rem 0.75rem;
+            margin-right: 1rem;
+            color: #4a5568;
+            font-weight: 600;
+            cursor: pointer;
+        }
         .btn-primary {
             padding: 0.75rem;
             border-radius: 10px;
@@ -60,7 +72,7 @@ if (!isset($_SESSION['login'])) {
 </head>
 <body>
 
-<div class="container">
+<div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="text-center mb-4">
@@ -69,7 +81,7 @@ if (!isset($_SESSION['login'])) {
             </div>
             
             <div class="card p-4">
-                <form action="simpan.php" method="POST">
+                <form action="simpan.php" method="POST" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="nama_produk" class="form-label">Nama Produk</label>
                         <input type="text" name="nama_produk" id="nama_produk" class="form-control" placeholder="Contoh: Jam Tangan" required>
@@ -83,13 +95,23 @@ if (!isset($_SESSION['login'])) {
                         </div>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label for="stok" class="form-label">Jumlah Stok</label>
                         <input type="number" name="stok" id="stok" class="form-control" placeholder="0" required>
                     </div>
 
+                    <div class="mb-4">
+                        <label for="gambar" class="form-label">Foto Produk</label>
+                        <input type="file" name="gambar" id="gambar" class="form-control" accept="image/png, image/jpeg, image/jpg">
+                        <div class="form-text mt-2" style="font-size: 0.8rem;">
+                            <i class="fas fa-info-circle me-1"></i> Format: JPG, JPEG, PNG (Maks 2MB)
+                        </div>
+                    </div>
+
                     <div class="d-grid gap-2">
-                        <button type="submit" name="simpan" class="btn btn-primary">Simpan Produk</button>
+                        <button type="submit" name="simpan" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Simpan Produk
+                        </button>
                         <a href="index.php" class="btn btn-link">Batal dan Kembali</a>
                     </div>
                 </form>

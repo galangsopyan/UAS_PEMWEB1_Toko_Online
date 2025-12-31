@@ -3,9 +3,19 @@ session_start();
 if (!isset($_SESSION['login'])) { header("Location: auth/login.php"); exit; }
 include 'config/koneksi.php';
 
-// Ambil statistik produk
+// 1. Ambil statistik produk (Tetap)
 $query_produk = mysqli_query($koneksi, "SELECT COUNT(*) as total, SUM(stok) as total_stok FROM produk");
 $stats = mysqli_fetch_assoc($query_produk);
+
+// 2. AMBIL DATA UNTUK GRAFIK (BARU)
+$labels = [];
+$values = [];
+// Mengambil 5 produk dengan stok terbanyak untuk grafik
+$query_chart = mysqli_query($koneksi, "SELECT nama_produk, stok FROM produk ORDER BY stok DESC LIMIT 5");
+while($row = mysqli_fetch_assoc($query_chart)) {
+    $labels[] = $row['nama_produk'];
+    $values[] = $row['stok'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -16,6 +26,7 @@ $stats = mysqli_fetch_assoc($query_produk);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f0f2f5; color: #1a202c; }
@@ -28,6 +39,8 @@ $stats = mysqli_fetch_assoc($query_produk);
         .api-widget { background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%); color: white; border: none; }
         .weather-icon { font-size: 2.5rem; }
         .icon-box { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+        /* Style untuk canvas grafik */
+        #stokChart { max-height: 300px !important; width: 100% !important; }
     </style>
 </head>
 <body>
@@ -83,6 +96,13 @@ $stats = mysqli_fetch_assoc($query_produk);
 
         <div class="col-12">
             <div class="card card-custom p-4 bg-white shadow-sm">
+                <h5 class="fw-bold mb-4 text-primary"><i class="fas fa-chart-bar me-2"></i>Analisis Stok Produk</h5>
+                <canvas id="stokChart"></canvas>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card card-custom p-4 bg-white shadow-sm">
                 <h5 class="fw-bold mb-4">Kendali Cepat</h5>
                 <div class="row g-3">
                     <div class="col-md-4">
@@ -117,8 +137,7 @@ $stats = mysqli_fetch_assoc($query_produk);
             document.getElementById('quote-text').innerText = "Sukses bukan kunci kebahagiaan. Kebahagiaan adalah kunci kesuksesan.";
         });
 
-    // 2. API CUACA (Open-Meteo - Tanpa API Key)
-    // Mengambil data cuaca Jakarta secara default
+    // 2. API CUACA (Open-Meteo)
     fetch('https://api.open-meteo.com/v1/forecast?latitude=-6.2088&longitude=106.8456&current_weather=true')
         .then(res => res.json())
         .then(data => {
@@ -126,6 +145,40 @@ $stats = mysqli_fetch_assoc($query_produk);
             document.getElementById('weather-temp').innerText = temp + "°C";
             document.getElementById('weather-desc').innerText = "Jakarta, ID";
         });
+
+    // 3. KONFIGURASI GRAFIK CHART.JS (BARU)
+    const ctx = document.getElementById('stokChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: <?php echo json_encode($labels); ?>,
+            datasets: [{
+                label: 'Jumlah Stok',
+                data: <?php echo json_encode($values); ?>,
+                backgroundColor: 'rgba(49, 130, 206, 0.5)',
+                borderColor: '#3182ce',
+                borderWidth: 2,
+                borderRadius: 8,
+                hoverBackgroundColor: '#3182ce'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#f0f2f5' }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

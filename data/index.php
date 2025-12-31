@@ -58,6 +58,13 @@ $result = mysqli_query($koneksi, $query);
             color: #718096; 
             border: none; 
         }
+        .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
         .btn-action { 
             width: 35px; 
             height: 35px; 
@@ -69,7 +76,6 @@ $result = mysqli_query($koneksi, $query);
             text-decoration: none;
         }
         
-        /* Perbaikan CSS Media Print */
         @media print {
             .no-print, .btn, form, nav, .breadcrumb { 
                 display: none !important; 
@@ -80,6 +86,10 @@ $result = mysqli_query($koneksi, $query);
             }
             body { 
                 background-color: white; 
+            }
+            /* Menampilkan gambar saat diprint */
+            .product-img {
+                border: none;
             }
         }
     </style>
@@ -127,7 +137,7 @@ $result = mysqli_query($koneksi, $query);
                 <thead>
                     <tr>
                         <th class="ps-4 py-3 text-center" width="5%">No</th>
-                        <th class="py-3">Informasi Produk</th>
+                        <th class="py-3 text-center" width="10%">Foto</th> <th class="py-3">Informasi Produk</th>
                         <th class="py-3">Harga</th>
                         <th class="py-3 text-center">Stok</th>
                         <th class="py-3 text-center no-print">Aksi</th>
@@ -141,6 +151,12 @@ $result = mysqli_query($koneksi, $query);
                     ?>
                     <tr>
                         <td class="text-center text-muted small"><?= $no++; ?></td>
+                        <td class="text-center">
+                            <?php 
+                            $gambar = !empty($row['gambar']) ? $row['gambar'] : 'default.png';
+                            ?>
+                            <img src="../assets/img/<?= $gambar; ?>" class="product-img" alt="produk">
+                        </td>
                         <td>
                             <div class="fw-bold text-dark"><?= htmlspecialchars($row['nama_produk']); ?></div>
                             <small class="text-muted small">ID: #PROD-<?= $row['id']; ?></small>
@@ -168,7 +184,7 @@ $result = mysqli_query($koneksi, $query);
                         endwhile; 
                     else : ?>
                         <tr>
-                            <td colspan="5" class="text-center py-5 text-muted fst-italic">Data produk tidak ditemukan.</td>
+                            <td colspan="6" class="text-center py-5 text-muted fst-italic">Data produk tidak ditemukan.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
