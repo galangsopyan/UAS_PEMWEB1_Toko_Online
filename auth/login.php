@@ -116,7 +116,7 @@
             </button>
             
             <div class="text-center">
-                <small class="text-muted">Galang Store &copy; 2026</small>
+                <small class="text-muted">Galang Store &copy;  2026</small>
             </div>
         </form>
     </div>
