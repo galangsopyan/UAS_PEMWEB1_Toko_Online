@@ -7,17 +7,17 @@ if (isset($_POST['update'])) {
     $harga = $_POST['harga'];
     $stok = $_POST['stok'];
     
-    // Cek apakah ada file gambar baru yang diunggah
-    if ($_FILES['gambar']['name'] != "") {
-        $ekstensi = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-        $nama_baru = time() . "." . $ekstensi;
-        move_uploaded_file($_FILES['gambar']['tmp_name'], "../assets/img/" . $nama_baru);
-        
-        $query = "UPDATE produk SET nama_produk='$nama', harga='$harga', stok='$stok', gambar='$nama_baru' WHERE id='$id'";
-    } else {
-        // Jika tidak ada gambar baru, jangan ubah kolom gambar
-        $query = "UPDATE produk SET nama_produk='$nama', harga='$harga', stok='$stok' WHERE id='$id'";
-    }
+    // Di dalam logika upload gambar pada update.php
+if ($_FILES['gambar']['name'] != "") {
+    $clean_name = str_replace(' ', '_', strtolower($nama_produk));
+    $ekstensi   = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
+    $nama_baru  = $clean_name . "_" . time() . "." . $ekstensi;
+    
+    move_uploaded_file($_FILES['gambar']['tmp_name'], "../assets/img/" . $nama_baru);
+    
+    // Update query termasuk kolom gambar
+    $query = "UPDATE produk SET nama_produk='$nama_produk', harga='$harga', stok='$stok', gambar='$nama_baru' WHERE id='$id'";
+}
 
     if (mysqli_query($koneksi, $query)) {
         header("Location: index.php?pesan=update_berhasil");
