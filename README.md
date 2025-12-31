@@ -1,7 +1,8 @@
 # 🛒 Galang Store - Sistem Manajemen Produk
 
-Tugas Proyek UAS Pemrograman Web 1.
-link web : https://galang-sopyan.great-site.net/auth/login.php
+Tugas Proyek UAS Pemrograman Web 1
+
+## link web : https://galang-sopyan.great-site.net/auth/login.php
 
 ## ✨ Fitur Utama
 - **Login System**: Dilengkapi Password Hashing (Keamanan).
