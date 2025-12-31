@@ -20,4 +20,4 @@ Tugas Proyek UAS Pemrograman Web 1.
 2. Import file `uas_pemweb1.sql` ke phpMyAdmin Anda.
 3. Sesuaikan konfigurasi di `config/koneksi.php`.
 4. Jalankan melalui XAMPP di `localhost/UAS_PEMWEB1`.
-5.
+5. Selamat Mencoba
