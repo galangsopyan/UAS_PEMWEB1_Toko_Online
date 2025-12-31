@@ -17,7 +17,7 @@ if (isset($_POST['simpan'])) {
         // 3. Ambil ekstensi asli (jpg, png, dll)
         $ekstensi = pathinfo($filename, PATHINFO_EXTENSION);
         
-        // 4. Gabungkan: nama_produk_timestamp.ekstensi (Timestamp tetap perlu agar file tidak duplikat)
+        // HASIL AKHIR: nama_produk_timestamp.ekstensi
         $nama_file_baru = $clean_name . "_" . time() . "." . $ekstensi;
         $folder         = "../assets/img/" . $nama_file_baru;
         
@@ -27,9 +27,7 @@ if (isset($_POST['simpan'])) {
     }
 
     $query = "INSERT INTO produk (nama_produk, harga, stok, gambar) VALUES ('$nama_produk', '$harga', '$stok', '$nama_file_baru')";
-    
-    if (mysqli_query($koneksi, $query)) {
-        header("Location: index.php?pesan=berhasil");
-    }
+    mysqli_query($koneksi, $query);
+    header("Location: index.php");
 }
 ?>
