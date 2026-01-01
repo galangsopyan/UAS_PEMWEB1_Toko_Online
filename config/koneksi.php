@@ -4,7 +4,7 @@ $is_localhost = ($_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_ADDR
 
 if ($is_localhost) {
     // PENGATURAN UNTUK LAPTOP (LOCALHOST)
-    $host = "localhost";
+    $host = "127.0.0.1:3307";
     $user = "root";
     $pass = "";
     $db   = "Uas_Pemweb1";
